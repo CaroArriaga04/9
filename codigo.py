@@ -1,25 +1,20 @@
 class nota:
-    def __init__(self, folio, fecha, cliente, monto_pagar, servicio_realizado):
-        self.folio = folio
-        self.fecha = fecha
-        self.cliente = cliente
-        self.monto_pagar = monto_pagar
-        self.servicio_realizado = servicio_realizado
+    def __init__():
+        pass
     
     def registrar_nota():
         pass
 
     def consultas_reportes():
-        print("Menu de opciones")
-        opcion = input("Elige una opcion \n1.Consulta por periodo\n2.Consulta por folio\n")
-        if opcion == 1:
-            pass
+       pass
 
     def cancelar_nota():
         pass
 
     def recuperar_nota():
         pass
+
+
 print("*** TALLER MECANICO ***")
 print("*** BIENVENIDO A NUESTRO SISTEMA DE NOTAS ***")
 
