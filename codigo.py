@@ -1,6 +1,6 @@
 import datetime
 
-class nota:
+class Nota:
     def __init__(self, folio, fecha, cliente, monto_a_pagar):
         self.folio = folio
         self.fecha = fecha
