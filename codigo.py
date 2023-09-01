@@ -15,11 +15,12 @@ while True:
     if opcion == 1:
         clases.registrar_nota()
     elif opcion == 2:
-        print("Submenu Consultas y reportes")
-        opcion = input("Elige una opcion \n1.Consulta por periodo\n2.Consulta por folio")
-        if opcion == 1:
+        print("\n** CONSULTAS Y REPORTES **")
+        print("1.Consulta por periodo\n2.Consulta por folio ")
+        opcion = input("Elige una opcion: ")
+        if opcion == "1":
             clases.consulta_por_periodo()
-        elif opcion == 2:
+        elif opcion == "2":
             pass
         else:
             print("Opcion no valida")

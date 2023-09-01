@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from tabulate import tabulate
 
 class Nota:
     def __init__(self, cliente):
@@ -18,8 +19,11 @@ class Servicio:
         self.nombre = nombre
         self.costo = costo
 
+notas = []
+
 def registrar_nota():
     cliente = input("Nombre del cliente: ")
+    nota = Nota(cliente)
     while True:
         nombre_servicio = input("Nombre del servicio requerido (f para finalizar)): ")
         if nombre_servicio.lower() == "f":
@@ -29,37 +33,39 @@ def registrar_nota():
             print("El costo debe ser mayor que 0.")
             costo_servicio = float(input("Ingrese el costo del servicio: "))
         servicio = Servicio(nombre_servicio, costo_servicio)
-        nota = Nota(cliente)
         nota.agregar_servicio(servicio)
-        monto_total = nota.calcular_monto_total()
-        print("\n---------------NOTA-------------")
-        print(f"Folio: {nota.folio}")
-        print(f"Fecha: {nota.fecha}")
-        print(f"Cliente: {nota.cliente}")
-        print("--------------------------------")
-        print("Servicio:")
-        for servicio in nota.servicios:
-            print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
-        print("--------------------------------")
-        print(f"Total a pagar: ${monto_total:.2f}")
-        break
-    
-if __name__ == "__main__":
-    registrar_nota()
+    notas.append(nota)
+    monto_total = nota.calcular_monto_total()
+    print("\n---------------NOTA-------------")
+    print(f"Folio: {nota.folio}")
+    print(f"Fecha: {nota.fecha}")
+    print(f"Cliente: {nota.cliente}")
+    print("--------------------------------")
+    print("Servicio:")
+    for servicio in nota.servicios:
+        print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
+    print("--------------------------------")
+    print(f"Total a pagar: ${monto_total:.2f}")
 
 def consulta_por_periodo():
-    fecha_inicial = input("Ingresa la fecha inicial (dd/mm(yyyy): ")
-    fecha_inicial = datetime.datetime.strptime(fecha_inicial, "%d/%m/%Y").date()
-
-    fecha_final = input("Ingresa la fecha final (dd/mm/yyyy): ")
-    fecha_final = datetime.datetime.strptime(fecha_final, "%d/%m/%Y").date()
-
-    notas = []
-    for nota in notas:
-        if fecha_final <= nota.fecha <= fecha_final:
-            notas.append(nota)
-    
-    # Imprimir notas en un reporte tabular
+    while True:
+        try:
+            fecha_inicial = input("Ingresa la fecha inicial (dd/mm/aaaa): ")
+            fecha_final = input("Ingresa la fecha final (dd/mm/aaaa): ")
+            fecha_inicial = datetime.datetime.strptime(fecha_inicial, "%d/%m/%Y").date()
+            fecha_final = datetime.datetime.strptime(fecha_final, "%d/%m/%Y").date()
+        except Exception:
+            print("Las fechas ingresadas deben estar en formato dd/mm/aaaa")
+        else: 
+            notas_por_periodo = [n for n in notas if fecha_inicial <= datetime.datetime.strptime(n.fecha, "%d/%m/%Y").date() <= fecha_final]
+            if notas_por_periodo:
+                print("\n---------NOTAS POR PERIODO---------")
+                informacion = [[n.folio, n.fecha, n.cliente] for n in notas_por_periodo]
+                titulos = ["Folio", "Fecha", "Cliente"]
+                print(tabulate(informacion, titulos, tablefmt="fancy_grid"))
+            else:
+                print("No hay notas registradas en el periodo ingresado")
+            break
 
 def consulta_por_folio():
     pass
@@ -69,3 +75,10 @@ def cancelar_nota():
 
 def recuperar_nota():
     pass
+
+def main():
+    registrar_nota()
+    consulta_por_periodo()
+
+if __name__ == "__main__":
+    main()
