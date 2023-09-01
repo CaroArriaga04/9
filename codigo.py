@@ -29,7 +29,8 @@ while True:
     elif opcion == 4:
         pass
     elif opcion == 5:
-        break
+        if input("Deseas salir del programa: ").upper() in ("S", "SI"):
+            break
 
 
     
