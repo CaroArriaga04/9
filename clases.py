@@ -68,7 +68,24 @@ def consulta_por_periodo():
             break
 
 def consulta_por_folio():
-    pass
+    folio = input("Ingresa el folio de la nota solicitada: ")
+    nota_encontrada = False
+    for nota in notas:
+        if nota.folio == folio:
+            monto_total = nota.calcular_monto_total()
+            print("\n---------------NOTA-------------")
+            print(f"Folio: {nota.folio}")
+            print(f"Fecha: {nota.fecha}")
+            print(f"Cliente: {nota.cliente}")
+            print("--------------------------------")
+            print("Servicio:")
+            for servicio in nota.servicios:
+                print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
+            print("--------------------------------")
+            print(f"Total a pagar: ${monto_total:.2f}")
+            nota_encontrada = True
+    if not nota_encontrada:
+        print("** El folio indicado no existe o corresponde a una nota cancelada **")
 
 def cancelar_nota():
     pass
@@ -79,6 +96,7 @@ def recuperar_nota():
 def main():
     registrar_nota()
     consulta_por_periodo()
+    consulta_por_folio()
 
 if __name__ == "__main__":
     main()

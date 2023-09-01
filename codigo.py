@@ -21,7 +21,7 @@ while True:
         if opcion == "1":
             clases.consulta_por_periodo()
         elif opcion == "2":
-            pass
+            clases.consulta_por_folio()
         else:
             print("Opcion no valida")
     elif opcion == 3:
