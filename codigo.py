@@ -28,7 +28,7 @@ while True:
     elif opcion == "3":
         clases.cancelar_nota()
     elif opcion == "4":
-        pass
+        clases.recuperar_nota()
     elif opcion == "5":
         if input("Deseas salir del programa: ").upper() in ("S", "SI"):
             break
