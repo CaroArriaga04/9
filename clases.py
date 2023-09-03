@@ -88,37 +88,37 @@ def consulta_por_folio():
         print("** El folio indicado no existe o corresponde a una nota cancelada **")
 
 def cancelar_nota():
-while True:
-    nota_cancelar= None 
-    Cancelado=input("escribe el Folio de la nota que desees cancelar: ")
-
-    for buscador in notas:
-        if notas.folio == Cancelado:
-            nota_encontrada = buscador
-            break
-
-    if nota_cancelar:
-        print ("Esta será la nota que vas a cancelar: ")
-        print("\n---------------NOTA-------------")
-        print(f"Folio: {Nota.folio}")
-        print(f"Fecha: {Nota.fecha}")
-        print(f"Cliente: { Nota.cliente}")
+    nota_a_cancelar= None 
+    cancelado = input("Ingresa el folio de la nota a cancelar: ")
+    for nota in notas:
+        if nota.folio == cancelado:
+            nota_a_cancelar = nota
+        else:
+            print("\n** La nota ingresada no se encuentra en el sistema **")
+    if nota_a_cancelar:
+        monto_total = nota.calcular_monto_total()
+        print("\n---------NOTA A CANCELAR--------")
+        print(f"Folio: {nota_a_cancelar.folio}")
+        print(f"Fecha: {nota_a_cancelar.fecha}")
+        print(f"Cliente: {nota_a_cancelar.cliente}")
         print("--------------------------------")
         print("Servicio:")
-        confirmacion=input("¿Estas Seguro de que realmente quieres cancelar esta nota?: ")
-    while True:
-        if confirmacion.upper() == "SI" or confirmacion.upper() == "S" or confirmacion.upper() == "Y":
-            print ("Está bien, esta nota dejará de ser tomada en cuenta de momemnto")
-            Nota.cancelada = True
-        if Cancelado.lower() == Nota.folio and Nota.cancelada == True:
-              print ("Esta nota se ha cancelado.")
-
-        if confirmacion.upper() == "NO" or confirmacion.upper() == "N":
-            print ("La nota ya no se canceló.")
-            break
-        else:
-            print ("la respuesta debe ser Si o no.")
-            continue
+        for servicio in nota.servicios:
+            print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
+            print("--------------------------------")
+            print(f"Total a pagar: ${monto_total:.2f}")
+        confirmacion = input("\n¿Estas seguro de que quieres cancelar esta nota?: ")
+        while True:
+            if confirmacion.upper() == "SI" or confirmacion.upper() == "S" or confirmacion.upper() == "Y":
+                print ("\n*** NOTA CANCELADA ***")
+                nota_a_cancelar.cancelada = True
+                break
+            if confirmacion.upper() == "NO" or confirmacion.upper() == "N":
+                print ("\n*** NOTA NO CANCELADA ***")
+                break
+            else:
+                print ("La respuesta ingresada debe ser Si o No.")
+                continue
 
 def recuperar_nota():
     pass
@@ -127,6 +127,7 @@ def main():
     registrar_nota()
     consulta_por_periodo()
     consulta_por_folio()
+    cancelar_nota()
 
 if __name__ == "__main__":
     main()

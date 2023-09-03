@@ -1,7 +1,8 @@
 import clases
 
-print("*** TALLER MECANICO ***")
-print("*** BIENVENIDO A NUESTRO SISTEMA DE NOTAS ***")
+print("---------------TALLER MECANICO--------------")
+print("   BIENVENIDO A NUESTRO SISTEMA DE NOTAS    ")
+print("--------------------------------------------")
 
 while True:
     print("\nMENU")
@@ -11,11 +12,11 @@ while True:
     print("4. Recuperar nota")
     print("5. Salir del sistema")
 
-    opcion = int(input("Elige una opcion: "))
-    if opcion == 1:
+    opcion = input("Elige una opcion: ")
+    if opcion == "1":
         clases.registrar_nota()
-    elif opcion == 2:
-        print("\n** CONSULTAS Y REPORTES **")
+    elif opcion == "2":
+        print("\n----CONSULTAS Y REPORTES----")
         print("1.Consulta por periodo\n2.Consulta por folio ")
         opcion = input("Elige una opcion: ")
         if opcion == "1":
@@ -24,11 +25,11 @@ while True:
             clases.consulta_por_folio()
         else:
             print("Opcion no valida")
-    elif opcion == 3:
+    elif opcion == "3":
+        clases.cancelar_nota()
+    elif opcion == "4":
         pass
-    elif opcion == 4:
-        pass
-    elif opcion == 5:
+    elif opcion == "5":
         if input("Deseas salir del programa: ").upper() in ("S", "SI"):
             break
 
