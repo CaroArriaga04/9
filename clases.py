@@ -88,7 +88,37 @@ def consulta_por_folio():
         print("** El folio indicado no existe o corresponde a una nota cancelada **")
 
 def cancelar_nota():
-    pass
+while True:
+    nota_cancelar= None 
+    Cancelado=input("escribe el Folio de la nota que desees cancelar: ")
+
+    for buscador in notas:
+        if notas.folio == Cancelado:
+            nota_encontrada = buscador
+            break
+
+    if nota_cancelar:
+        print ("Esta será la nota que vas a cancelar: ")
+        print("\n---------------NOTA-------------")
+        print(f"Folio: {Nota.folio}")
+        print(f"Fecha: {Nota.fecha}")
+        print(f"Cliente: { Nota.cliente}")
+        print("--------------------------------")
+        print("Servicio:")
+        confirmacion=input("¿Estas Seguro de que realmente quieres cancelar esta nota?: ")
+    while True:
+        if confirmacion.upper() == "SI" or confirmacion.upper() == "S" or confirmacion.upper() == "Y":
+            print ("Está bien, esta nota dejará de ser tomada en cuenta de momemnto")
+            Nota.cancelada = True
+        if Cancelado.lower() == Nota.folio and Nota.cancelada == True:
+              print ("Esta nota se ha cancelado.")
+
+        if confirmacion.upper() == "NO" or confirmacion.upper() == "N":
+            print ("La nota ya no se canceló.")
+            break
+        else:
+            print ("la respuesta debe ser Si o no.")
+            continue
 
 def recuperar_nota():
     pass
