@@ -1,0 +1,24 @@
+"001": {"titulo": "Nota 1", "contenido": "Contenido de la nota 1"},
+    "002": {"titulo": "Nota 2", "contenido": "Contenido de la nota 2"},
+    "003": {"titulo": "Nota 3", "contenido": "Contenido de la nota 3"},
+}
+print("Notas canceladas:")
+print("{:<5} {:<10}".format("Folio", "Título"))
+for folio, nota in notas_canceladas.items():
+    print("{:<5} {:<10}".format(folio, nota["titulo"]))
+if folio_deseado.lower() == "no":
+    print("No se realizará ninguna recuperación.")
+else:
+if folio_deseado in notas_canceladas:
+nota = notas_canceladas[folio_deseado]
+        print("\nDetalle de la nota:")
+        print("Título:", nota["titulo"])
+        print("Contenido:", nota["contenido"])
+ confirmacion = input("¿Desea recuperar esta nota? (Sí/No): ")
+ if confirmacion.lower() == "si":
+ del notas_canceladas[folio_deseado]
+            print("La nota ha sido recuperada con éxito.")
+        else:
+            print("La nota no ha sido recuperada.")
+    else:
+        print("El folio proporcionado no corresponde a una nota cancelada.")
