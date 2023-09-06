@@ -58,14 +58,15 @@ def consulta_por_periodo():
         except Exception:
             print("Las fechas ingresadas deben estar en formato dd/mm/aaaa")
         else: 
-            notas_por_periodo = [n for n in notas if fecha_inicial <= datetime.datetime.strptime(n.fecha, "%d/%m/%Y").date() <= fecha_final]
+            notas_no_canceladas = [n for n in notas if not n.cancelada]
+            notas_por_periodo = [n for n in notas_no_canceladas if fecha_inicial <= datetime.datetime.strptime(n.fecha, "%d/%m/%Y").date() <= fecha_final]
             if notas_por_periodo:
                 print("\n---------NOTAS POR PERIODO---------")
                 informacion = [[n.folio, n.fecha, n.cliente] for n in notas_por_periodo]
                 titulos = ["Folio", "Fecha", "Cliente"]
                 print(tabulate(informacion, titulos, tablefmt="fancy_grid"))
             else:
-                print("No hay notas registradas en el periodo ingresado")
+                print("\n** No hay notas registradas en el periodo ingresado **")
             break
 
 def consulta_por_folio():
@@ -161,12 +162,40 @@ def recuperar_nota():
         else:
             print("\nEl folio proporcionado no corresponde a una nota cancelada.")
 
-def main():
-    registrar_nota()
-    consulta_por_periodo()
-    consulta_por_folio()
-    cancelar_nota()
-    recuperar_nota()
 
-if __name__ == "__main__":
-    main()
+print("---------------TALLER MECANICO--------------")
+print("   BIENVENIDO A NUESTRO SISTEMA DE NOTAS    ")
+print("--------------------------------------------")
+
+while True:
+    print("\nMENU")
+    print("1. Registrar nota")
+    print("2. Consultas y Reportes")
+    print("3. Cancelar nota")
+    print("4. Recuperar nota")
+    print("5. Salir del sistema")
+
+    opcion = input("Elige una opcion: ")
+    if opcion == "1":
+        registrar_nota()
+    elif opcion == "2":
+        while True:
+            print("\n----CONSULTAS Y REPORTES----")
+            print("1.Consulta por periodo\n2.Consulta por folio\n3.Regresar al menu principal ")
+            opcion = input("Elige una opcion: ")
+            if opcion == "1":
+                consulta_por_periodo()
+            elif opcion == "2":
+                consulta_por_folio()
+            elif opcion == "3":
+                break
+            else:
+                print("\n** Opcion no valida, ingrese nuevamente **")
+    elif opcion == "3":
+        cancelar_nota()
+    elif opcion == "4":
+        recuperar_nota()
+    elif opcion == "5":
+        if input("Deseas salir del programa: ").upper() in ("S", "SI"):
+            break
+
