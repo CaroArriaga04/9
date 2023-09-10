@@ -23,15 +23,38 @@ class Servicio:
 notas = []
 
 def registrar_nota():
-    cliente = input("Nombre del cliente: ")
+    while True:
+      cliente = input("Nombre del cliente: ")
+      if cliente=="":
+        print ("**Se requiere colocar un nombre para registrar la nota**")
+        continue
+      elif not (bool(re.search('^[a-zA-Z]+$', cliente))):
+        print ("\n**Un nombre no puede llevar numeros, intenta de nuevo.**")
+        continue
+      else:
+        break
     nota = Nota(cliente)
     while True:
         nombre_servicio = input("Nombre del servicio requerido (f para finalizar)): ")
+        if nombre_servicio=="":
+          print ("**no puedes dejar vacío este dato.**")
+          continue
+        elif not (bool(re.search('^[a-zA-Z]+$', nombre_servicio))):
+          print ("**se requiere saber que tipo de servicio fue en especifico, no numeros, intente de nuevo.**")
+          continue
         if nombre_servicio.lower() == "f":
             break
-        costo_servicio = float(input("Costo del servicio: "))
+        costo_servicio = input("Costo del servicio: ")
+        if costo_servicio == "":
+          print ("**El costo no puede estar vació o ser cero, intenta de nuevo.**")
+          continue
+        elif not (bool(re.match("^[0-9]+$", costo_servicio))):
+            print ("**el valor no puede ser una letra o estar omitido.**")
+            continue
+        costo_servicio=float(costo_servicio)
+
         while costo_servicio <= 0:
-            print("El costo debe ser mayor que 0.")
+            print("***El costo debe ser mayor que 0.***")
             costo_servicio = float(input("Ingrese el costo del servicio: "))
         servicio = Servicio(nombre_servicio, costo_servicio)
         nota.agregar_servicio(servicio)
@@ -47,6 +70,7 @@ def registrar_nota():
         print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
     print("--------------------------------")
     print(f"Total a pagar: ${monto_total:.2f}")
+
 
 def consulta_por_periodo():
     while True:
@@ -324,26 +348,55 @@ while True:
     print("5. Salir del sistema")
 
     opcion = input("Elige una opcion: ")
-    if opcion == "1":
-        registrar_nota()
-    elif opcion == "2":
-        while True:
-            print("\n----CONSULTAS Y REPORTES----")
-            print("1.Consulta por periodo\n2.Consulta por folio\n3.Regresar al menu principal ")
-            opcion = input("Elige una opcion: ")
-            if opcion == "1":
-                consulta_por_periodo()
-            elif opcion == "2":
-                consulta_por_folio()
-            elif opcion == "3":
-                break
-            else:
-                print("\n** Opcion no valida, ingrese nuevamente **")
-    elif opcion == "3":
-        cancelar_nota()
-    elif opcion == "4":
-        recuperar_nota()
-    elif opcion == "5":
-        if input("Deseas salir del programa: ").upper() in ("S", "SI"):
-            break
+    if opcion == "":
+        print("\n** El valor no se puede omitir. Intenta de nuevo **")
+        continue
 
+    if opcion == "1":
+        confirmar = input("¿Estas seguro de que quieres registrar una nota (Solamente Sí/No)?: ")
+        if confirmar.upper() in ("S", "SI"):
+            print("De acuerdo.")
+            registrar_nota()
+
+    elif opcion == "2":
+        confirmar = input("¿Estas seguro de que quieres realizar una consulta (Solamente Sí/No)?: ")
+        if confirmar.upper() in ("S", "SI"):
+            print("De acuerdo.")
+            while True:
+                print("\n----CONSULTAS Y REPORTES----")
+                print("1. Consulta por periodo\n2. Consulta por folio\n3. Regresar al menu principal ")
+                sub_opcion = input("Elige una opcion: ")
+                if sub_opcion == "1":
+                    consulta_por_periodo()
+                elif sub_opcion == "2":
+                    consulta_por_folio()
+                elif sub_opcion == "3":
+                    print("***OK***")
+                    break
+                else:
+                    print("\n** Opcion no valida, ingrese nuevamente **")
+
+    elif opcion == "3":
+        confirmar = input("¿Estas seguro de que quieres cancelar una nota (Solamente Sí/No)?: ")
+        if confirmar.upper() in ("S", "SI"):
+            print("De acuerdo.")
+            cancelar_nota()
+
+    elif opcion == "4":
+        confirmar = input("¿Estas seguro de que quieres recuperar una nota (Solamente Sí/No)?: ")
+        if confirmar.upper() in ("S", "SI"):
+            print("De acuerdo.")
+            recuperar_nota()
+
+    elif opcion == "5":
+        salida = input("¿Deseas salir del programa (Solamente Sí/No)?: ")
+        if salida.upper() in ("S", "SI"):
+            print("De acuerdo. Saliendo del programa...")
+            break
+        elif salida.upper() in ("N", "NO"):
+            print("***No se saldrá del programa, se le regresará al menú principal.***")
+        else:
+            print("En esta respuesta solo se acepta Sí o No")
+
+    else:
+        print("\n** Opción no válida, ingrese nuevamente **")
