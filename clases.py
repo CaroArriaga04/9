@@ -89,71 +89,202 @@ def consulta_por_folio():
     if not nota_encontrada:
         print("** El folio indicado no existe o corresponde a una nota cancelada **")
 
+def generar_folio():
+    if not hasattr(generar_folio, "contador"):
+        generar_folio.contador = 1
+    folio = generar_folio.contador
+    generar_folio.contador += 1
+    return str(folio)
+
+notas = []
+
+class Nota:
+    def __init__(self, folio, fecha, cliente, servicios):
+        self.folio = folio
+        self.fecha = fecha
+        self.cliente = cliente
+        self.servicios = servicios
+        self.cancelada = False
+
+    def calcular_monto_total(self):
+        total = sum(servicio.costo for servicio in self.servicios)
+        return total
+
 def cancelar_nota():
-    nota_a_cancelar = None 
-    cancelado = input("Ingresa el folio de la nota a cancelar: ")
-    for nota in notas:
-        if nota.folio == cancelado:
-            nota_a_cancelar = nota
+    while True:
+        cancelado = input("Ingresa el folio de la nota a cancelar (o '0' para regresar al menú principal): ")
+        if cancelado == '0':
             break
-    if nota_a_cancelar:
-        monto_total = nota.calcular_monto_total()
-        print("\n---------NOTA A CANCELAR--------")
-        print(f"Folio: {nota_a_cancelar.folio}")
-        print(f"Fecha: {nota_a_cancelar.fecha}")
-        print(f"Cliente: {nota_a_cancelar.cliente}")
-        print("--------------------------------")
-        print("Servicio:")
-        for servicio in nota_a_cancelar.servicios:
-            print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
+        
+        nota_a_cancelar = None 
+        for nota in notas:
+            if nota.folio == cancelado:
+                nota_a_cancelar = nota
+                break
+        
+        if nota_a_cancelar:
+            monto_total = nota_a_cancelar.calcular_monto_total()
+            print("\n---------NOTA A CANCELAR--------")
+            print(f"Folio: {nota_a_cancelar.folio}")
+            print(f"Fecha: {nota_a_cancelar.fecha}")
+            print(f"Cliente: {nota_a_cancelar.cliente}")
             print("--------------------------------")
+            print("Servicio:")
+            for servicio in nota_a_cancelar.servicios:
+                print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
+                print("--------------------------------")
             print(f"Total a pagar: ${monto_total:.2f}")
-        confirmacion = input("\n¿Estas seguro de que quieres cancelar esta nota?: ")
-        while True:
-            if confirmacion.upper() == "SI" or confirmacion.upper() == "S" or confirmacion.upper() == "Y":
-                print ("\n*** NOTA CANCELADA ***")
-                nota_a_cancelar.cancelada = True
-                break
-            if confirmacion.upper() == "NO" or confirmacion.upper() == "N":
-                print ("\n*** NOTA NO CANCELADA ***")
-                break
-            else:
-                print ("La respuesta ingresada debe ser Si o No.")
-                continue
-    else:
-        print("\n** La nota ingresada no se encuentra en el sistema **")
+            confirmacion = input("\n¿Estás seguro de que quieres cancelar esta nota? (Si/No): ")
+            while True:
+                if confirmacion.upper() in ["SI", "S"]:
+                    print("\n*** NOTA CANCELADA ***")
+                    nota_a_cancelar.cancelada = True
+                    break
+                elif confirmacion.upper() in ["NO", "N"]:
+                    print("\n*** NOTA NO CANCELADA ***")
+                    break
+                else:
+                    print("La respuesta ingresada debe ser 'Si' o 'No'.")
+                    confirmacion = input("\n¿Estás seguro de que quieres cancelar esta nota? (Si/No): ")
+        else:
+            print("\n** La nota ingresada no se encuentra en el sistema **")
 
 def recuperar_nota():
-    notas_canceladas = []
-    for nota in notas:
-        if nota.cancelada:
-            notas_canceladas.append(nota)
+    while True:
+        recuperar = input("Ingresa el folio de la nota a recuperar (o '0' para regresar al menú principal): ")
+        if recuperar == '0':
+            break
+        
+        nota_recuperada = None 
+        for nota in notas:
+            if nota.folio == recuperar:
+                nota_recuperada = nota
+                break
+        
+        if nota_recuperada:
+            print("\n---------NOTA RECUPERADA--------")
+            print(f"Folio: {nota_recuperada.folio}")
+            print(f"Fecha: {nota_recuperada.fecha}")
+            print(f"Cliente: {nota_recuperada.cliente}")
+            print("--------------------------------")
+            print("Servicio:")
+            for servicio in nota_recuperada.servicios:
+                print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
+                print("--------------------------------")
+        else:
+            print("\n** La nota ingresada no se encuentra en el sistema **")
+while True:
+    print("\n--- Menú ---")
+    print("1. Cancelar Nota")
+    print("2. Recuperar Nota")
+    print("3. Salir")
+    opcion = input("Selecciona una opción: ")
+
+    if opcion == '1':
+        cancelar_nota()
+    elif opcion == '2':
+        recuperar_nota()
+    elif opcion == '3':
+        break
+    else:
+        print("Opción no válida. Por favor, selecciona una opción válida.")
+
+from tabulate import tabulate
+
+# Función para generar folios únicos y consecutivos
+def generar_folio():
+    if not hasattr(generar_folio, "contador"):
+        generar_folio.contador = 1
+    folio = generar_folio.contador
+    generar_folio.contador += 1
+    return str(folio)
+
+# Lista para almacenar las notas
+notas = []
+
+class Nota:
+    def __init__(self, folio, fecha, cliente, servicios):
+        self.folio = folio
+        self.fecha = fecha
+        self.cliente = cliente
+        self.servicios = servicios
+        self.cancelada = False
+
+    def calcular_monto_total(self):
+        total = sum(servicio.costo for servicio in self.servicios)
+        return total
+
+# Función para cancelar una nota
+def cancelar_nota():
+    while True:
+        cancelado = input("Ingresa el folio de la nota a cancelar (o '0' para regresar al menú principal): ")
+        if cancelado == '0':
+            break
+        
+        nota_a_cancelar = None 
+        for nota in notas:
+            if nota.folio == cancelado:
+                nota_a_cancelar = nota
+                break
+        
+        if nota_a_cancelar:
+            monto_total = nota_a_cancelar.calcular_monto_total()
+            print("\n---------NOTA A CANCELAR--------")
+            print(f"Folio: {nota_a_cancelar.folio}")
+            print(f"Fecha: {nota_a_cancelar.fecha}")
+            print(f"Cliente: {nota_a_cancelar.cliente}")
+            print("--------------------------------")
+            print("Servicio:")
+            for servicio in nota_a_cancelar.servicios:
+                print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
+                print("--------------------------------")
+            print(f"Total a pagar: ${monto_total:.2f}")
+            confirmacion = input("\n¿Estás seguro de que quieres cancelar esta nota? (Si/No): ")
+            while True:
+                if confirmacion.lower() in ["si", "s"]:
+                    print("\n*** NOTA CANCELADA ***")
+                    nota_a_cancelar.cancelada = True
+                    break
+                elif confirmacion.lower() in ["no", "n"]:
+                    print("\n*** NOTA NO CANCELADA ***")
+                    break
+                else:
+                    print("La respuesta ingresada debe ser 'Si' o 'No'.")
+                    confirmacion = input("\n¿Estás seguro de que quieres cancelar esta nota? (Si/No): ")
+        else:
+            print("\n** La nota ingresada no se encuentra en el sistema **")
+
+def recuperar_nota():
+    notas_canceladas = [nota for nota in notas if nota.cancelada]
     if notas_canceladas:
         print("\n---------NOTAS CANCELADAS---------")
         informacion = [[n.folio, n.fecha, n.cliente] for n in notas_canceladas]
         titulos = ["Folio", "Fecha", "Cliente"]
-        print(tabulate(informacion, titulos, tablefmt="fancy_grid"))
-    folio_a_recuperar = input("Ingresa el folio de la nota a recuperar (No para salir): ")
-    if (folio_a_recuperar.lower() == "no"):
-        print("\nNo se realizará ninguna recuperación.")
-    else:
+        print(tabulate(informacion, headers=titulos, tablefmt="fancy_grid"))
+    while True:
+        folio_a_recuperar = input("Ingresa el folio de la nota a recuperar (o 'No' para salir): ")
+        if folio_a_recuperar.lower() == "no":
+            break
+        
         nota_a_recuperar = None
         for nota in notas_canceladas:
             if nota.folio == folio_a_recuperar:
                 nota_a_recuperar = nota
+                break
+        
         if nota_a_recuperar:
-            monto_total = nota.calcular_monto_total()
+            monto_total = nota_a_recuperar.calcular_monto_total()
             print("\n---------------NOTA-------------")
-            print(f"Folio: {nota.folio}")
-            print(f"Fecha: {nota.fecha}")
-            print(f"Cliente: {nota.cliente}")
+            print(f"Folio: {nota_a_recuperar.folio}")
+            print(f"Fecha: {nota_a_recuperar.fecha}")
+            print(f"Cliente: {nota_a_recuperar.cliente}")
             print("--------------------------------")
             print("Servicio:")
-            for servicio in nota.servicios:
+            for servicio in nota_a_recuperar.servicios:
                 print(f"- {servicio.nombre}: ${servicio.costo:.2f}")
-            print("--------------------------------")
+                print("--------------------------------")
             print(f"Total a pagar: ${monto_total:.2f}")
-            confirmacion = input("\n¿Desea recuperar esta nota? (Sí/No): ")
+            confirmacion = input("\n¿Desea recuperar esta nota? (Si/No): ")
             if confirmacion.lower() == "si":
                 nota_a_recuperar.cancelada = False
                 print("** La nota ha sido recuperada con éxito **")
@@ -161,6 +292,23 @@ def recuperar_nota():
                 print("La nota no ha sido recuperada.")
         else:
             print("\nEl folio proporcionado no corresponde a una nota cancelada.")
+
+while True:
+    print("\n--- Menú ---")
+    print("1. Cancelar Nota")
+    print("2. Recuperar Nota")
+    print("3. Salir")
+    opcion = input("Selecciona una opción: ")
+
+    if opcion == '1':
+        cancelar_nota()
+    elif opcion == '2':
+        recuperar_nota()
+    elif opcion == '3':
+        break
+    else:
+        print("Opción no válida. Por favor, selecciona una opción válida.")
+
 
 
 print("---------------TALLER MECANICO--------------")
